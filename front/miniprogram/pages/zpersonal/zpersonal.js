@@ -1,23 +1,27 @@
 Page({
   data: {
-    message1 : '',
-    message2 : '',
-    message3 : '',
     isLogin : false,  // 是否登录
     loginBtnText : '点击登录/注册',
-    appuserName : '',
+    appUserName : '',
   },
 
+  /* 入口 */
   onLoad: function(options) {
     const thisView = this;
+    thisView.initData = {...thisView.data};
+    console.log(thisView.initData);
     if(getApp().globalData.isLogin === 1) { thisView.setData({ isLogin : true }); }
-    wx.$event.on("updataIslogin-4", this, (isLogin) => {  // 全局监听：更新 data 的 islogin
+    if(thisView.data.isLogin) { thisView.loginViewDataUpdata(); }
+    if(!thisView.data.isLogin) { thisView.quitLoginViewDataUpdata(); }
+    wx.$event.on("updataIslogin-4", this, (isLogin) => {  // 全局监听：更新 data 的 islogin 时动态激发
       thisView.setData({ isLogin : isLogin });
-      if(isLogin) {  // 登录后的数据更新操作
-        thisView.loginViewDataUpdata();  // 其他的界面数据更新操作
-      }
+      if(isLogin) { thisView.loginViewDataUpdata(); }
+      if(!isLogin) { thisView.quitLoginViewDataUpdata(); }
     })
   },
+
+  /* 用于储存最初的 data，用于退出登录后的数据还原 */
+  initData : {},
 
   /* 全局事件测试 */
   onGlobalEvent: function(data) {
@@ -63,11 +67,6 @@ Page({
                       })
                   }
                 });
-
-                
-
-                
-                
               } else if (res.cancel) {}
             }
           })
@@ -76,25 +75,6 @@ Page({
         }
       }
     });  
-       
-  },
-
-  /* （废弃）创建定时器，等待登录信息传来 */
-  waitLoginInfo : function() {
-    const thisView = this;
-    if(getApp().globalData.isLogin === 0){
-      var interID = setInterval(() => {
-        if(getApp().globalData.isLogin === 0) {
-          console.log('循环获取「是否登录」的信息中...');
-        } else {
-          console.log('循环完毕，现在修改 data 的值');
-          clearInterval(interID); 
-          interID = null;
-          if(getApp().globalData.isLogin === 1) { thisView.setData({ isLogin : true }); }
-        }
-      }, 200);
-    }
-    if(getApp().globalData.isLogin === 1) { thisView.setData({ isLogin : true }); }
   },
 
   /* 单击退出登录后 */
@@ -113,8 +93,8 @@ Page({
           // ...
           
           getApp().saveIdTkone2Sto('', '', (err, message) => {  // 缓存到本地
-            if (err) { console.error('空值化 失败', err); } else {
-              console.log('信息空值化成功！' + message);
+            if (err) { console.error('storage 空值化 失败', err); } else {
+              console.log('storage 信息空值化成功！' + message);
               getApp().getUserLoginInfo();
               getApp().globalData.isLogin = -1;
               getApp().syncEventBus4('updataIslogin', false);
@@ -125,11 +105,51 @@ Page({
     })
   },
 
-  /* 登录后，联网获取一些信息 */
+  /* 登录后，联网获取一些信息，以及其他操作 */
   loginViewDataUpdata : function() {
-    getApp().getUserName();  // 获取用户的姓名
+    const thisView = this;
+    getApp().getUserName((err, data) => {  // 获取用户的姓名
+      if(err || data.msg !== 'ok'){console.log(data.msg);getApp().tip('获取用户呢称失败');} else {
+        thisView.setData({ appUserName : data.data.username });
+      }
+    });
+  },
 
+  /* 未登录，状态的数据清空或还原，以及其他操作 */
+  quitLoginViewDataUpdata : function() {
+    const thisView = this;
+    thisView.setData( thisView.initData );
+  },
+
+  /* 修改用户昵称 */
+  modUserName : function() {
+    const thisView = this;
+    
+    if(thisView.data.appUserName){
+      console.log('开始修改');
+      wx.showModal({
+        title: '请输入您的新昵称',
+        editable: true,
+        placeholderText: thisView.data.appUserName,
+        success (res) {
+          if (res.confirm) { // 用户点确定
+            console.log(res.content);
+            getApp().modUserName(res.content, (err, data) => {
+              getApp().getUserName((err, data) => {  // 获取用户的姓名
+                if(err || data.msg !== 'ok'){getApp().tip('获取用户呢称失败');} else {
+                  thisView.setData({ appUserName : data.data.username });
+                  getApp().tip('貌似成功了');
+                }
+              });
+            });
+          } else if (res.cancel) { }
+        }
+      })
+    }
   }
+
+
+
 })
 
 

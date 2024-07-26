@@ -1,20 +1,6 @@
 <!--pages/zpersonal/zpersonal.wxml-->
-<view>
-  <text>{{message1}}</text>
-  <view class="br"></view>
-</view>
 
-<view>
-  <text>{{message2}}</text>
-  <view class="br"></view>
-</view>
-
-<view>
-  <text>{{message3}}</text>
-  <view class="br"></view>
-</view>
-
-
+<view class="hr"></view>
 
 <view wx:if="{{!isLogin}}">  
   <text  class="testbtn" bindtap="loginByWx">{{loginBtnText}}</text>  
@@ -31,8 +17,9 @@
   <text>登录状态：{{isLogin}}</text>
 </view>
 
-<view>
-  <text>姓名：{{appuserName}}</text>
+<view style="margin-block: 32px;">
+  <text >昵称：{{appUserName}}</text>
+  <button style="display: inline;width: min-content;margin: 14px;" wx:if="{{appUserName}}" bindtap="modUserName">修改</button>
 </view>
 
 <!-- <view class="hr"></view> -->

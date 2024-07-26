@@ -39,7 +39,14 @@ App({
     return wx.showToast({ title: msg, icon: 'none', mask: true, duration: time})
   },
 
-  /* 随机数生成器 */
+  /* （太过干扰，最后再加）加载中弹窗 */
+  loading : function(act = 'show') {
+    if(act === 'show') { wx.showLoading({mask : true, title: '加载中'}) }
+    if(act === 'hide') { wx.hideLoading() }
+    return 0;
+  },
+
+  /* （目前，备而不用）随机数生成器 */
   getRandom : function(minNum, maxNum){
     switch(arguments.length){ 
       case 1:
@@ -54,7 +61,6 @@ App({
   /* 启动小程序后，如果本地没存数据，就直接就获取用户 openid 信息，并存入 globaldata */
   getUserLoginInfo : function(){
     const appfunc = this;
-    
     wx.login({ success (res) {
       if (res.code) {
         console.log('jscode: ' + res.code)
@@ -66,21 +72,12 @@ App({
             appfunc.globalData.user_token = res.data.session_key;
             console.log('...')
             appfunc.tip('auto:' + getApp().globalData.user_openid);
-          })
-          .catch(err => {  appfunc.netErrorTip(err) });
+          }).catch(err => {  appfunc.netErrorTip(err) });
       } else { appfunc.netErrorTip() }
     }, fail (res) {
-      appfunc.tip('连接服务器失败');
+      console.log(res); appfunc.tip('连接服务器失败');
     }
   })
-  },
-
-  /* （作废）验证 session 需要的 sha256 加盐, session 需要填写在第二个参数 */
-  getHash : function(a, b){
-    const CryptoJS = require('./cryptojs/cryptojs'); 
-    var hash_result = CryptoJS.HmacSHA256(a, b).toString()
-    console.log(hash_result);
-    return hash_result;
   },
 
   /* 验证本地的 token 是否有效 */
@@ -94,7 +91,7 @@ App({
           callback(null, res.data);
         } else {callback('err, 验证信息出错')}
       })
-      .catch(err => { callback('err')});
+      .catch(err => { callback(err)});
   },
 
   /* 异步将 id 和 token 储存到微信本地缓存 */
@@ -168,37 +165,42 @@ App({
   },
 
   /* 根据 token 向小程序服务器发送 post 指令，分为 正常 或 非正常登录状态 */
-  userSendPostToCloud : function(isStorage = 'false', path, postdata, callback) {
+  userSendPostToCloud : function(type, path, postdata, callback) {  // type 分为 'global'（伪登录游客） 和 'storage'(登录)
     var openid, token;
     const appfunc = this;
-    if(islogin) {  // 正常登录
+    if(type === 'storage') {  // 正常登录
       appfunc.getInStoIdToken((err, data) => {
         if(err){appfunc.netErrorTip((err === 'err0') ? '未登录' : '未知错误！');callback(err)} else {
+          console.log(data);
           openid = data.openid, token = data.token;
-          var userInfoData = {'openid' : openid, 'token' : token, 'islogin' : true};
+          var userInfoData = {'openid' : openid, 'token' : token, 'postType' : type};
           var sendData = {...postdata, ...userInfoData};
           appfunc.postToserver(path, sendData)
             .then(res => {
               callback(null, res.data);
             })
-            .catch(err => { callback('err') });
+            .catch(err => { callback(err) });
         }
       });
-    } else { /* 非正常登录 先空着 */ }
+    } else if(type === 'global') { /* 非正常登录，也叫 伪登录游客，先空着 */  }
   },
 
-  /* 获取登录后的用户名 */
+  /* 登录后，获取用户名 */
   getUserName : function(callback) {
-    var isStorage = true;
     var appfunc = this;
-    appfunc.getInStoIdToken((err, data) => {
-      if(err){appfunc.netErrorTip((err === 'err0') ? '未登录' : '未知错误！');callback(err)} else {
-        console.log('这是本地获取的 data！');
-        console.log(data);
-        openid = data.openid, token = data.token;
-      }
+    appfunc.userSendPostToCloud('storage', '/index/getUserName', {}, (err, data) => {
+      callback(err, data);
     });
-  }
+  },
+
+  /* 登录后，修改用户名 */
+  modUserName : function( newName, callback) {
+    var appfunc = this;
+    if(newName === '') {newName = 'empty'}
+    appfunc.userSendPostToCloud('storage', '/index/modUserName', {'newName' : newName}, (err, data) => {
+      callback(err, data);
+    });
+  },
 
 
 
