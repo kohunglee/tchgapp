@@ -127,8 +127,8 @@ class Index
     public function loginCheck() {
 
         $isStorage = true;
-        $openid = 'oUTgY7UVcnNIGefp5TYpARUt5qv4';
-        $token = 'd5515f480e68ec1207df9a52461d5ab3637ab8002a6414a9fb7016f2135286cd';
+        $openid = env('TEMP_OPENID');
+        $token = env('TEMP_TOKEN');
 
         
         if($isStoragesNew) {
