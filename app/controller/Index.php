@@ -34,7 +34,7 @@ class Index
             if ($version) {  $msg = $msg . "数据库连接成功，数据库版本为：" . $version[0]['VERSION()']; } 
             else { $msg = $msg . "查询数据库版本失败，但可能连接仍成功（取决于具体错误）。"; }  
         } catch (\PDOException $e) { $msg += "数据库连接或查询失败：" . $e->getMessage(); }
-        return json(['msg' => $msg , 'status' => '1', 'ps' => '加了一个 user']);
+        return json(['msg' => $msg , 'status' => '1', 'ps' => '2024年07月26日17:50:59']);
     }
 
     /* 路由测试 hello world */
@@ -110,7 +110,7 @@ class Index
         } else { json(['msg' => 'ERROR']); }
         $url = 'https://api.weixin.qq.com/wxa/checksession?';
         $url = $url . 'access_token='.$token;
-        $url = $url . '&signature='.$sha_session;
+        $url = $url . '&signature='.$sha_session;  // 没人知道原版是什么，session 已经是加密的了
         $url = $url . '&openid='.$openid;
         $url = $url . '&sig_method=hmac_sha256';
         $ch = curl_init();
@@ -126,10 +126,9 @@ class Index
     /* API：尝试向数据表里写入登录信息 */
     public function loginCheck() {
 
-        $isStorage = true;
+        $isStoragesNew = true;
         $openid = env('TEMP_OPENID');
         $token = env('TEMP_TOKEN');
-
         
         if($isStoragesNew) {
             $count = Db::name('user')->where(['user_wxopenid' => $openid])->count();
@@ -138,7 +137,7 @@ class Index
                 $checkResultArr = $this->checkSession_private($openid, $token);  
                 if(isset($checkResultArr['errmsg']) && $checkResultArr['errmsg'] == 'ok'){  // 官网核验通过，向数据库添加新数据（新用户，在短时间内验证两次，不过分吧？）
                     $data = [
-                        'user_name' => '昵称默认值',
+                        'user_name' => '用户123',
                         'user_wxopenid' => $openid,
                         'token' => hash_hmac('sha256', '', $token, false)  // 将 token 加密处理
                     ];
@@ -150,5 +149,43 @@ class Index
                 return json(['msg' => 'err', 'details' => '已经存在这个用户']);
             }
         } else {}
+    }
+
+    /* 私有函数，用于检测用户的 openid 和 token 是否和数据库中相符 */
+    private function checkSQLSession($openid ='none', $token = 'no_token') {
+        $token = hash_hmac('sha256', '', $token, false);  // 再加一次秘
+        $sqlGetUserToken = Db::name('user')->where('user_wxopenid', $openid)->value('token');
+        return hash_equals($token, $sqlGetUserToken);
+    }
+
+    /* API：获取用户名 */
+    public function getUserName() {
+        $openid = input('openid');
+        $token = input('token');
+        $postType = input('postType');
+        if($postType === 'storage' && $this->checkSQLSession($openid, $token)) {
+            $username = Db::name('user')->where('user_wxopenid', $openid)->value('user_name');
+            return json(['msg' => 'ok', 'details' => '获取用户呢称成功！', 'data' => ['username' => $username]]);
+        } else {
+            return json(['msg' => 'err', 'details' => '出错了，原因未知']);
+        }
+    }
+
+    /* API：修改用户名 */
+    public function modUserName() {
+
+        $openid = input('openid');
+        $token = input('token');
+        $postType = input('postType');
+        $newName = input('newName');
+        if($newName === '') { $newName = 'empty'; }
+
+        if($postType === 'storage' && $this->checkSQLSession($openid, $token)) {
+            $data = [ 'user_name' => $newName ];
+            Db::name('user')->where('user_wxopenid', $openid)->update($data);
+            return json(['msg' => 'ok', 'details' => '修改用户呢称成功！']);
+        } else {
+            return json(['msg' => 'err', 'details' => '出错了，原因未知']);
+        }
     }
 }
