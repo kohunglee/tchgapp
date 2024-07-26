@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/store/store",
+    "pages/order/order",
+    "pages/zpersonal/zpersonal"
+  ],
+  "window": {
+    "backgroundColor": "#FFF",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFF",
+    "navigationBarTitleText": " ",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+
+
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "image/home.png",
+        "selectedIconPath": "image/home-fill.png",
+        "text": "饭店"
+      },
+      {
+        "pagePath": "pages/store/store",
+        "iconPath": "image/beer.png",
+        "selectedIconPath": "image/beer-fill.png",
+        "text": "酒水"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "iconPath": "image/todo.png",
+        "selectedIconPath": "image/todo-fill.png",
+        "text": "订单"
+      },
+      {
+        "pagePath": "pages/zpersonal/zpersonal",
+        "iconPath": "image/user.png",
+        "selectedIconPath": "image/user-fill.png",
+        "text": "我的"
+      }
+    ]
+  }
+}

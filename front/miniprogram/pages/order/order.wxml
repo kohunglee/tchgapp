@@ -1,0 +1,6 @@
+<!--pages/order/order.wxml-->
+<text>pages/order/order.wxml</text>
+
+<view>
+  <text>登录状态：{{isLogin}}</text>
+</view>

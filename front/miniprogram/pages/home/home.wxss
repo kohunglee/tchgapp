@@ -1,0 +1,7 @@
+/* pages/home/home.wxss */
+
+.testbtn {
+  border: 1px solid grey;
+  margin: 6px;
+  padding: 6px;
+}

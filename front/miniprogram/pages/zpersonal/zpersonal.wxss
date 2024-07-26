@@ -1,0 +1,19 @@
+/* pages/zpersonal/zpersonal.wxss */
+
+.hr {
+  height: 2px;
+  background-color: #4c4e52;
+  margin: 12px;
+}
+
+.br {
+  height: 22rpx;
+}
+
+.testbtn {
+  border: 1px solid grey;
+  margin: 6px;
+  padding: 6px;
+}
+
+/* 临时------------------------ */

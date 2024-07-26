@@ -1,0 +1,6 @@
+<!--pages/home/home.wxml-->
+<text>pages/home/home.wxml</text>
+
+<view>
+  <text>登录状态：{{isLogin}}</text>
+</view>
