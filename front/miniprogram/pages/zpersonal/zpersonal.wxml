@@ -14,7 +14,7 @@
 <view class="hr"></view>
 
 <view>
-  <text>登录状态：{{isLogin}}</text>
+  <text>登录情况：{{isLogin}}</text>
 </view>
 
 <view style="margin-block: 32px;">

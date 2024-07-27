@@ -1,10 +1,6 @@
 /* pages/zpersonal/zpersonal.wxss */
 
-.hr {
-  height: 2px;
-  background-color: #4c4e52;
-  margin: 12px;
-}
+
 
 .br {
   height: 22rpx;

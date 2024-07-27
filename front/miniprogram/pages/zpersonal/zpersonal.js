@@ -40,22 +40,14 @@ Page({
             confirmText:'是', cancelText:'否',
             success (res) {
               if (res.confirm) {
-                
                 var openid = getApp().globalData.user_openid;
                 var token = getApp().globalData.user_token;
-
-                getApp().checkSession(openid, token, (err, data)=>{  // 必须再验证一遍，否则太危险了...
-                  if(err || data.errmsg !== 'ok') {
-                      console.log('err'); getApp().globalData.isLogin = -1;
+                getApp().loginCheck(openid, token, (err, data)=>{
+                  if(err || data.msg !== 'ok') {
+                      console.log(err); getApp().globalData.isLogin = -1;
                       getApp().getUserLoginInfo();getApp().tip('验证出错，请重试！');
                     } else {
                       getApp().tip('验证成功：' + openid);
-
-                      // --将 globaldata 里 openid 和 token 存入 storage
-                      // --删除 globaldata 里 openid 和 token
-                      // --globaldata 里的 isLogin = 1
-                      // --全局事件，通知其他页面也修正 data : islogin，以及一些其他的信息
-
                       getApp().saveIdTkone2Sto(openid, token, (err, message) => {  // 缓存到本地
                         if (err) { console.error('储存失败', err); } else {
                           console.log('信息储存到本地成功！' + message);

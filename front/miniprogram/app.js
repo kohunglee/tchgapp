@@ -13,23 +13,25 @@ App({
     'isLogin' : 0,   // -1：检查完发现不能自动登陆  0：默认值  1：已登录
     'appuserName' : null,
   },
-  
-  /* --------------------- */
-  /* 下面都是自己构建的 函数库 */
-  /* --------------------- */
 
-  /* 向我的托管程序发送 post 请求 */ 
+  /* 向我的托管服务器发送 post 请求 */ 
   postToserver: function(path, data){
-    wx.cloud.init()
-    return wx.cloud.callContainer({
-      "config": { "env": "prod-2g3ftnp7705efda4" },
-      "path": path,
-      "header": { "X-WX-SERVICE": "thinkphp-nginx-jugv" },
-      "method": "POST", "data": data
-    })
+    var isLocalhost = false;  // 使用本地服务器还是？？？
+    if(isLocalhost === false){
+      wx.cloud.init()
+      return wx.cloud.callContainer({
+        "config": { "env": "prod-2g3ftnp7705efda4" },
+        "path": path,
+        "header": { "X-WX-SERVICE": "thinkphp-nginx-jugv" },
+        "method": "POST", "data": data
+      })
+    } else {
+      ///
+    }
+    
   },
 
-  /* 网络错误提示（应该会很常用） */ 
+  /* 网络错误提示 */ 
   netErrorTip : function(msg = '网络错误') {
     return wx.showToast({ title: msg, icon: 'error', mask: true, duration: 2000})
   },
@@ -46,7 +48,7 @@ App({
     return 0;
   },
 
-  /* （目前，备而不用）随机数生成器 */
+  /* （目前备而不用）随机数生成器 */
   getRandom : function(minNum, maxNum){
     switch(arguments.length){ 
       case 1:
@@ -61,33 +63,34 @@ App({
   /* 启动小程序后，如果本地没存数据，就直接就获取用户 openid 信息，并存入 globaldata */
   getUserLoginInfo : function(){
     const appfunc = this;
-    wx.login({ success (res) {
-      if (res.code) {
-        console.log('jscode: ' + res.code)
-        appfunc.postToserver('/index/getWxOpenid', {'jscode' : res.code})
-          .then(res => {
-            if(res.data.openid == null) { appfunc.tip('无法连接服务器... 请重启小程序重试！'); return 0}
-            console.log(res.data)
-            appfunc.globalData.user_openid = res.data.openid;  // ↓ 先储存到 global data 中，后续用户点击登录时可以直接调用
-            appfunc.globalData.user_token = res.data.session_key;
-            console.log('...')
-            appfunc.tip('auto:' + getApp().globalData.user_openid);
-          }).catch(err => {  appfunc.netErrorTip(err) });
-      } else { appfunc.netErrorTip() }
-    }, fail (res) {
-      console.log(res); appfunc.tip('连接服务器失败');
-    }
-  })
+    wx.login({ 
+      success (res) {
+        if (res.code) {
+          console.log('jscode: ' + res.code)
+          appfunc.postToserver('/index/getWxOpenid', {'jscode' : res.code})
+            .then(res => {
+              if(res.data.openid == null) { appfunc.tip('无法连接服务器... 请重启小程序重试！'); return 0}
+              console.log(res.data)
+              appfunc.globalData.user_openid = res.data.openid;  // ↓ 先储存到 global data 中，后续用户点击登录时可以直接调用
+              appfunc.globalData.user_token = res.data.session_key;
+              console.log('...')
+              appfunc.tip('auto:' + getApp().globalData.user_openid);
+            }).catch(err => {  appfunc.netErrorTip(err) });
+        } else { appfunc.netErrorTip() }
+      }, fail (res) {
+        console.log(res); appfunc.tip('连接服务器失败');
+      }
+    })
   },
 
   /* 验证本地的 token 是否有效 */
-  checkSession : function(openid, token, callback){
+  loginCheck : function(openid, token, callback){
     var t_openid = openid, t_token = token;
     console.log('上传验证的openid' + t_openid);
-    this.postToserver('/index/checkSession', {'openid' : t_openid, 'sha_session' : t_token})
+    this.postToserver('/index/loginCheck', {'openid' : t_openid, 'token' : t_token})
       .then(res => {
         console.log(res.data);
-        if(res.data.errmsg === 'ok'){
+        if(res.data.msg === 'ok'){
           callback(null, res.data);
         } else {callback('err, 验证信息出错')}
       })
@@ -130,17 +133,17 @@ App({
     const appfunc = this;
     appfunc.tip('读取登录信息中...');
     appfunc.getInStoIdToken((err, data) => {  // 第一步，读缓存盘，看看有缓存的 id 和 token 吗
-      if(err){
+      if(err) {
         appfunc.tip('请先登录');
         console.log('缓存信息不存在，需要用户手动登录');
         appfunc.globalData.isLogin = -1;
         appfunc.getUserLoginInfo();
       } else {  // id 和 token 存在
         console.log('缓存信息存在');
-        appfunc.checkSession(data.openid, data.token, (err, data)=>{
+        appfunc.loginCheck(data.openid, data.token, (err, data)=>{
           console.log('检验数据有效性完成，回调数据如下：');
           console.log(data);
-          if(err == null && data.errmsg !== 'undefined' && data.errmsg === 'ok'){
+          if(err == null && data.msg !== 'undefined' && data.msg === 'ok'){
             console.log('在线核验通过！');
             appfunc.tip('登录成功！');
             getApp().syncEventBus4('updataIslogin', true);

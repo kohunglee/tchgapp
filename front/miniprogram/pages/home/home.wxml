@@ -4,3 +4,5 @@
 <view>
   <text>登录状态：{{isLogin}}</text>
 </view>
+
+<view class="hr"></view>
