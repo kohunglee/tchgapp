@@ -16,19 +16,13 @@ App({
 
   /* 向我的托管服务器发送 post 请求 */ 
   postToserver: function(path, data){
-    var isLocalhost = false;  // 使用本地服务器还是？？？
-    if(isLocalhost === false){
-      wx.cloud.init()
-      return wx.cloud.callContainer({
-        "config": { "env": "prod-2g3ftnp7705efda4" },
-        "path": path,
-        "header": { "X-WX-SERVICE": "thinkphp-nginx-jugv" },
-        "method": "POST", "data": data
-      })
-    } else {
-      ///
-    }
-    
+    wx.cloud.init();
+    return wx.cloud.callContainer({
+      "config": { "env": "prod-2g3ftnp7705efda4" },
+      "path": path,
+      "header": { "X-WX-SERVICE": "thinkphp-nginx-jugv" },
+      "method": "POST", "data": data
+    })
   },
 
   /* 网络错误提示 */ 
@@ -140,10 +134,11 @@ App({
         appfunc.getUserLoginInfo();
       } else {  // id 和 token 存在
         console.log('缓存信息存在');
-        appfunc.loginCheck(data.openid, data.token, (err, data)=>{
+        appfunc.loginCheck(data.openid, data.token, (err, data2)=>{
           console.log('检验数据有效性完成，回调数据如下：');
-          console.log(data);
-          if(err == null && data.msg !== 'undefined' && data.msg === 'ok'){
+          console.log(err);
+          console.log(data2);
+          if(err == null && data2.msg !== 'undefined' && data2.msg === 'ok'){
             console.log('在线核验通过！');
             appfunc.tip('登录成功！');
             getApp().syncEventBus4('updataIslogin', true);

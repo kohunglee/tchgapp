@@ -3,6 +3,7 @@ Page({
     isLogin : false,  // 是否登录
     loginBtnText : '点击登录/注册',
     appUserName : '',
+    consolelog : '123',
   },
 
   /* 入口 */
@@ -81,7 +82,7 @@ Page({
           // --重新获取一遍 openid 和 token
           // 用户在线的 data 都 一切清除和还原
           // --global Login = -1
-          // 全局事件 islogin = false
+          // --全局事件 islogin = false
           // ...
           
           getApp().saveIdTkone2Sto('', '', (err, message) => {  // 缓存到本地
@@ -101,7 +102,7 @@ Page({
   loginViewDataUpdata : function() {
     const thisView = this;
     getApp().getUserName((err, data) => {  // 获取用户的姓名
-      if(err || data.msg !== 'ok'){console.log(data.msg);getApp().tip('获取用户呢称失败');} else {
+      if(err || data.msg !== 'ok'){console.log(data.msg);getApp().tip(data.msg + '获取用户呢称失败');} else {
         thisView.setData({ appUserName : data.data.username });
       }
     });
@@ -110,13 +111,12 @@ Page({
   /* 未登录，状态的数据清空或还原，以及其他操作 */
   quitLoginViewDataUpdata : function() {
     const thisView = this;
-    thisView.setData( thisView.initData );
+    thisView.setData( thisView.initData );  // 清空（还原）data
   },
 
   /* 修改用户昵称 */
   modUserName : function() {
     const thisView = this;
-    
     if(thisView.data.appUserName){
       console.log('开始修改');
       wx.showModal({
@@ -126,14 +126,24 @@ Page({
         success (res) {
           if (res.confirm) { // 用户点确定
             console.log(res.content);
-            getApp().modUserName(res.content, (err, data) => {
-              getApp().getUserName((err, data) => {  // 获取用户的姓名
-                if(err || data.msg !== 'ok'){getApp().tip('获取用户呢称失败');} else {
+            if(res.content === '') {  // 如果用户没有输入内容，则只获取昵称
+              getApp().getUserName((err, data) => {
+                if(err || data.msg !== 'ok'){getApp().tip('获取用户呢称失败，可能是登录信息失效');} else {
                   thisView.setData({ appUserName : data.data.username });
                   getApp().tip('貌似成功了');
                 }
               });
-            });
+            } else {  // 用户输入了内容，则上传昵称，并重新获取昵称
+              getApp().modUserName(res.content, (err, data) => {
+                if(err || data.msg !== 'ok'){getApp().tip('修改用户呢称失败，可能是登录信息失效');} else {
+                  getApp().getUserName((err, data) => {
+                    if(err || data.msg !== 'ok'){getApp().tip('获取用户呢称失败，可能是登录信息失效');} else {
+                      thisView.setData({ appUserName : data.data.username });
+                    }
+                  });
+                }
+              });
+            }
           } else if (res.cancel) { }
         }
       })

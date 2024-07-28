@@ -22,4 +22,6 @@
   <button style="display: inline;width: min-content;margin: 14px;" wx:if="{{appUserName}}" bindtap="modUserName">修改</button>
 </view>
 
-<!-- <view class="hr"></view> -->
+<view class="hr"></view>
+
+<input class="weui-input"  value="{{consolelog}}" />
