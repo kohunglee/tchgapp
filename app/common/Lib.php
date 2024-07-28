@@ -42,7 +42,7 @@ class Lib
     /* 用于检测用户的 openid 和 token 是否和数据库中相符 */
     public static function checkSQLSession($openid ='none', $token = 'no_token') {
         $token = hash_hmac('sha256', '', $token, false);  // 再加一次秘
-        $sqlGetUserToken = User::where('user_wxopenid', 'oUTgY7UVcnNIGefp5TYpARUt5qv4')->value('token');
+        $sqlGetUserToken = User::where('user_wxopenid', $openid)->value('token');
         return hash_equals($token, $sqlGetUserToken);
     }
 
@@ -68,7 +68,7 @@ class Lib
         $tokenDataArr = Lib::getToken();
         if (isset($tokenDataArr['access_token'])) {  
             $token = $tokenDataArr['access_token'];
-        } else { json(['msg' => 'ERROR']); }
+        } else { return json(['msg' => 'ERROR']); }
         $url = 'https://api.weixin.qq.com/wxa/checksession?';
         $url = $url . 'access_token='.$token;
         $url = $url . '&signature='.$sha_session;  // 没人知道原版是什么，session 已经是加密的了

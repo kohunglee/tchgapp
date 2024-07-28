@@ -18,6 +18,7 @@ use think\facade\Log;
 use think\facade\Db;
 use think\facade\Config;
 use app\model\User;
+use app\model\Biz;
 use app\common\Lib;
 
 class Index
@@ -26,74 +27,7 @@ class Index
     }
 
 // +----------------------------------------------------------------------
-// | 私有函数区
-// +----------------------------------------------------------------------
-
-    // /* 私有功能函数：将所有半角符号转化为全角符号，防止 SQL 注入等隐患 */
-    // private function toFullWidth($str, $isReversed = false) {  
-    //     $from = array(
-    //         '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',',
-    //         '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',  
-    //         '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~',  
-    //         ' ',  
-    //     );  
-    //     $to = array( 
-    //         '！', '＂', '＃', '＄', '％', '＆', '＇', '（', '）', '＊', '＋', '，',
-    //         '－', '．', '／', '：', '；', '＜', '＝', '＞', '？', '＠',  
-    //         '［', '＼', '］', '＾', '＿', '｀', '｛', '｜', '｝', '～',  
-    //         '　',  
-    //     );  
-    //     if($isReversed){ return str_replace($from, $str, $to); 
-    //     } else { return str_replace($from, $to, $str); }
-    // }
-
-    // /* 私有函数，用于检测用户的 openid 和 token 是否和数据库中相符 */
-    // private function checkSQLSession($openid ='none', $token = 'no_token') {
-    //     $token = hash_hmac('sha256', '', $token, false);  // 再加一次秘
-    //     $sqlGetUserToken = User::where('user_wxopenid', $openid)->value('token');
-    //     return hash_equals($token, $sqlGetUserToken);
-    // }
-
-    // /* 私有函数，获取 wx token */
-    // private function getToken() {
-    //     $url = 'https://api.weixin.qq.com/cgi-bin/token?';
-    //     $url = $url . 'grant_type=client_credential';
-    //     $url = $url . '&appid='.env('WX_APPID');
-    //     $url = $url . '&secret='.env('WX_SECRET');
-    //     $ch = curl_init();
-    //     curl_setopt($ch, CURLOPT_URL, $url);
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 将 curl_exec() 获取的信息以字符串返回，而不是直接输出。  
-    //     curl_setopt($ch, CURLOPT_HEADER, 0); // 不需要返回 HTTP 头部信息
-    //     $response = curl_exec($ch);  
-    //     $data = json_decode($response, true);
-    //     curl_close($ch); 
-    //     return $data;
-    // }
-
-    // /* 私有函数：向微信官方服务器检验当前客户端提供的 id 和 session 是否正确 */
-    // private function checkSessionOnline($openid, $sha_session) {
-    //     $token = '';
-    //     $tokenDataArr = Lib::getToken();
-    //     if (isset($tokenDataArr['access_token'])) {  
-    //         $token = $tokenDataArr['access_token'];
-    //     } else { json(['msg' => 'ERROR']); }
-    //     $url = 'https://api.weixin.qq.com/wxa/checksession?';
-    //     $url = $url . 'access_token='.$token;
-    //     $url = $url . '&signature='.$sha_session;  // 没人知道原版是什么，session 已经是加密的了
-    //     $url = $url . '&openid='.$openid;
-    //     $url = $url . '&sig_method=hmac_sha256';
-    //     $ch = curl_init();
-    //     curl_setopt($ch, CURLOPT_URL, $url);
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 将 curl_exec() 获取的信息以字符串返回，而不是直接输出。  
-    //     curl_setopt($ch, CURLOPT_HEADER, 0); // 不需要返回 HTTP 头部信息
-    //     $response = curl_exec($ch);  
-    //     $data = json_decode($response, true);
-    //     curl_close($ch);
-    //     return $data;
-    // }
-
-// +----------------------------------------------------------------------
-// | 对外的 API 开放区
+// | 对外的 API 开放区（而具函数放在 app/common/Lib.php）
 // +----------------------------------------------------------------------
 
     /* 首页，显示数据库地址以及能否连接到它 */ 
@@ -106,7 +40,7 @@ class Index
             if ($version) {  $msg = $msg . "数据库连接成功，数据库版本为：" . $version[0]['VERSION()']; } 
             else { $msg = $msg . "查询数据库版本失败，但可能连接仍成功（取决于具体错误）。"; }  
         } catch (\PDOException $e) { $msg = $msg."数据库连接或查询失败：" . $e->getMessage(); }
-        return json(['msg' => $msg , 'status' => '1', 'ps' => '改成了create', 'rootpath' => dirname(__DIR__)]) ;
+        return json(['msg' => $msg , 'status' => '1', 'ps' => '修复低级代码错误，昵称乱套', 'rootpath' => dirname(__DIR__)]) ;
     }
 
     /* 路由测试 hello world */
@@ -151,7 +85,9 @@ class Index
                 if($count_add == 1){
                     return json(['msg' => 'ok', 'details' => '成功添加一条用户数据', 'isnew' => 'true']);
                 }
-            } else {  // 老用户
+            } else {  // 确定是已存在的老用户，则更新一下 session
+                $data = ['token' => hash_hmac('sha256', '', $token, false)];
+                User::where('user_wxopenid', $openid)->update($data);
                 return json(['msg' => 'ok', 'details' => '这是一个老用户']);
             }
         } else {
@@ -179,20 +115,21 @@ class Index
         $postType = input('postType');
         $newName = input('newName');
         $newName = trim($newName);  // 去除两段的空格
-        $newName = substr($newName, 0, 10);  // 只截取前 10 个字符
+        $newName = mb_substr($newName, 0, 20, 'UTF-8');   // 只截取前 10 个字符
         $newName = Lib::toFullWidth($newName);  // 全角符号化
+        $newName = str_replace(array("\r\n", "\n"), '', $newName);  // 删去换行
         if($newName === '') { $newName = 'empty'; }
         $nameCount = User::where(['user_name' => $newName])->count();
         while ($nameCount !== 0) {  // 防止用户名重复
-            $newName = $newName.'_'.($nameCount);
+            $newName = $newName.'_'.rand(10, 99);
             $nameCount = User::where(['user_name' => $newName])->count();
         }
         if($postType === 'storage' && Lib::checkSQLSession($openid, $token)) {
             $data = [ 'user_name' => $newName ];
             User::where('user_wxopenid', $openid)->update($data);
-            return json(['msg' => 'ok', 'details' => '修改用户呢称成功！']);
+            return json(['msg' => 'ok', 'details' => '修改用户呢称成功！'. $newName]);
         } else {
-            return json(['msg' => 'err', 'details' => '出错了，原因未知']);
+            return json(['msg' => 'err', 'details' => '出错了，原因未知，昵称为' . $newName]);
         }
     }
 }
