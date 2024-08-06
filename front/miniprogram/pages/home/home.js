@@ -1,16 +1,30 @@
 // pages/home/home.js
 Page({
 
-  /**
-   * 页面的初始数据
-   */
+  
   data: {
-    isLogin : false
+    isLogin : false,
+    businessArray: [
+      { uid : 32, name : '李记扁粉大酒店', operatingHours : '6:00 ~ 23:00', awayFrom : '1 km'},
+      { uid : 41, name : '重庆火锅', operatingHours : '8:00 ~ 24:00', awayFrom : '0.7 km'},
+      { uid : 42, name : '冯记淄博烧烤', operatingHours : '12:00 ~ 23:00', awayFrom : '0.2 km'},
+      { uid : 43, name : '安阳大烩菜', operatingHours : '9:00 ~ 21:00', awayFrom : '4 km'},
+      { uid : 54, name : '玉林脆皮狗', operatingHours : '6:00 ~ 21:00', awayFrom : '2 km'},
+      { uid : 59, name : '潮汕海鲜火锅', operatingHours : '8:00 ~ 20:00', awayFrom : '1.8 km'},
+      { uid : 61, name : '老北京铜锅火锅', operatingHours : '8:00 ~ 24:00', awayFrom : '0.7 km'},
+      { uid : 62, name : '日本大寿司', operatingHours : '12:00 ~ 23:00', awayFrom : '0.2 km'},
+      { uid : 63, name : '美国洛杉矶牛肉面', operatingHours : '9:00 ~ 21:00', awayFrom : '4 km'},
+      { uid : 64, name : '枫叶刀削面', operatingHours : '6:00 ~ 21:00', awayFrom : '2 km'},
+      { uid : 65, name : '曲沟大驴肉', operatingHours : '8:00 ~ 20:00', awayFrom : '1.8 km'},
+      { uid : 66, name : '道口肥烧鸡', operatingHours : '8:00 ~ 24:00', awayFrom : '0.7 km'},
+      { uid : 67, name : '沙县大吃', operatingHours : '12:00 ~ 23:00', awayFrom : '0.2 km'},
+      { uid : 68, name : '意大利 gaga 西餐店', operatingHours : '9:00 ~ 21:00', awayFrom : '4 km'},
+      { uid : 69, name : '韩国泡菜大酒店', operatingHours : '6:00 ~ 21:00', awayFrom : '2 km'},
+      { uid : 70, name : '台湾烤香肠', operatingHours : '8:00 ~ 20:00', awayFrom : '1.8 km'},
+    ],
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  /* 入口 */
   onLoad(options) {
     const thisView = this;
     if(getApp().globalData.isLogin === 1) { thisView.setData({ isLogin : true }); }
@@ -19,54 +33,20 @@ Page({
     })
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
+  openBnsPage : function(e) {
+    e_bnsuid = e.currentTarget.dataset.uid;  // 商家唯一识别ID
+    wx.navigateTo({  
+      url: '/pages/zz-inpage/bnsinfor/bnsinfor',
+      success: function(res) {  // 将必要的数据传输给 商家详情页
+        res.eventChannel.emit('dataTransform', { 
+          bnsuid: e_bnsuid,
+          isLogin : data.isLogin,
+        })
+      }
+    })
+  }
 
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  },
+  
 })
 
 /*  // 底部导航栏使用，未来可以尝试改一下

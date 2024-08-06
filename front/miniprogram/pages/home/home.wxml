@@ -1,8 +1,11 @@
 <!--pages/home/home.wxml-->
-<text>pages/home/home.wxml</text>
 
-<view>
-  <text>登录状态：{{isLogin}}</text>
+<view class="business-list" wx:for="{{businessArray}}" data-uid="{{item.uid}}" bind:tap="openBnsPage">
+  {{item.name}} 
+  <view class="business-list-details">
+    {{item.operatingHours}}
+  </view>
+  <view class="business-list-awayFrom" style="float:right;margin-top: -25px;">
+    {{item.awayFrom}}
+  </view>
 </view>
-
-<view class="hr"></view>

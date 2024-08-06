@@ -25,3 +25,13 @@
 <view class="hr"></view>
 
 <input class="weui-input"  value="{{consolelog}}" />
+
+<view class="hr"></view>
+
+<button  style="display: inline;width: min-content;margin: 14px;"  bindtap="openNewWin">打开新页面 <mp-badge content="20"> </mp-badge></button>
+
+<mp-badge content="10"> </mp-badge>
+
+<mp-dialog title="test" show="{{false}}" bindbuttontap="tapDialogButton" buttons="{{buttons}}">
+    <view>test content</view>
+</mp-dialog>

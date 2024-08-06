@@ -2,7 +2,11 @@ text {
   color: #4c4e52;  /* 全局文本颜色默认值，灰色 */
 }
 
-.hr {
+page {
+  background-color: #f7f7f7;  /* 背景默认灰色 */
+}
+
+.hr {  /* 测试使用的 hr */
   height: 2px;
   background-color: #4c4e52;
   margin: 12px;

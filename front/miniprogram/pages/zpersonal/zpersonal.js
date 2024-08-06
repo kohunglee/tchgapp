@@ -4,12 +4,13 @@ Page({
     loginBtnText : '点击登录/注册',
     appUserName : '',
     consolelog : '123',
+    buttons: [{text: '取消'}, {text: '确认'}],
   },
 
   /* 入口 */
   onLoad: function(options) {
     const thisView = this;
-    thisView.initData = {...thisView.data};
+    thisView.initData = {...thisView.data};  // 储存最初的 data，用于退出登录后的数据还原
     console.log(thisView.initData);
     if(getApp().globalData.isLogin === 1) { thisView.setData({ isLogin : true }); }
     if(thisView.data.isLogin) { thisView.loginViewDataUpdata(); }
@@ -148,6 +149,13 @@ Page({
         }
       })
     }
+  },
+
+  /* 测试打开新页面 */
+  openNewWin() {
+    wx.navigateTo({  
+      url: '/pages/test/test'
+    })
   }
 
 

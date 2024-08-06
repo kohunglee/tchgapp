@@ -3,24 +3,30 @@
     "pages/home/home",
     "pages/store/store",
     "pages/order/order",
-    "pages/zpersonal/zpersonal"
+    "pages/zpersonal/zpersonal",
+    "pages/test/test",
+    "pages/zz-inpage/bnsinfor/bnsinfor"
   ],
   "window": {
-    "backgroundColor": "#FFF",
+    "backgroundColor": "#f7f7f7",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#FFF",
+    "navigationBarBackgroundColor": "#f7f7f7",
     "navigationBarTitleText": " ",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2",
+  "useExtendedLib": {
+    "kbone": true,
+    "weui": true
+  },
 
 
   "tabBar": {
     "color": "#7A7E83",
     "selectedColor": "#3cc51f",
     "borderStyle": "black",
-    "backgroundColor": "#ffffff",
+    "backgroundColor": "#fff",
     "list": [
       {
         "pagePath": "pages/home/home",
