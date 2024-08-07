@@ -1,2 +1,14 @@
-<!--pages/zz-inpage/bnsinfor.wxml-->
-<text>pages/zz-inpage/bnsinfor.wxml</text>
+<view class="page-infor">
+  <view class="infor-name"> {{view.name}}</view>
+  <view class="infor-operating-hours">{{view.operatingHours}}</view>
+  <view class="infor-away-from">{{view.awayFrom}}</view>
+  <view class="infor-introduction">{{view.introduction}}</view>
+</view>
+
+
+
+<view class="infor-toolbar">
+  <view>
+    <image src="../../../image/star-line.svg"  class="infor-storeUp"/>
+  </view>
+</view>

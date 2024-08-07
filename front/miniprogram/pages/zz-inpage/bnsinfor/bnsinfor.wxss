@@ -1,1 +1,33 @@
 /* pages/zz-inpage/bnsinfor.wxss */
+page {
+  background-color: white;
+}
+
+.page-infor {
+  padding: 10px;
+}
+
+.infor-name {
+  font-size: 2em;
+  margin: 10px;
+}
+
+.infor-operating-hours {
+  margin-left: 10px;
+}
+
+.infor-away-from {
+  float: right;
+  position: absolute;
+  right: 20px;
+  margin-top: -25px;
+}
+
+.infor-introduction {
+  text-indent: 2em;
+  font-family: serif;
+  margin: 10px;
+  text-align: justify;
+}
+
+

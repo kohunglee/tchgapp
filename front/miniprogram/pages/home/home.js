@@ -34,13 +34,14 @@ Page({
   },
 
   openBnsPage : function(e) {
-    e_bnsuid = e.currentTarget.dataset.uid;  // 商家唯一识别ID
+    const thisView = this;
+    var e_bnsuid = e.currentTarget.dataset.uid;  // 商家唯一识别ID
     wx.navigateTo({  
       url: '/pages/zz-inpage/bnsinfor/bnsinfor',
       success: function(res) {  // 将必要的数据传输给 商家详情页
         res.eventChannel.emit('dataTransform', { 
           bnsuid: e_bnsuid,
-          isLogin : data.isLogin,
+          isLogin : thisView.data.isLogin,
         })
       }
     })

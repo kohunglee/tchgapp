@@ -79,13 +79,6 @@ Page({
       confirmText:'是', cancelText:'否',
       success (res) {
         if (res.confirm) {
-          // --删除（空值化） storage 里的 openid 和 token
-          // --重新获取一遍 openid 和 token
-          // 用户在线的 data 都 一切清除和还原
-          // --global Login = -1
-          // --全局事件 islogin = false
-          // ...
-          
           getApp().saveIdTkone2Sto('', '', (err, message) => {  // 缓存到本地
             if (err) { console.error('storage 空值化 失败', err); } else {
               console.log('storage 信息空值化成功！' + message);
@@ -157,8 +150,6 @@ Page({
       url: '/pages/test/test'
     })
   }
-
-
 
 })
 
