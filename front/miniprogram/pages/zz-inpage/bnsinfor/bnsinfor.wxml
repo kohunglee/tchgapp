@@ -8,7 +8,9 @@
 
 
 <view class="infor-toolbar">
-  <view>
-    <image src="../../../image/star-line.svg"  class="infor-storeUp"/>
-  </view>
+    <image src="../../../image/star-line.svg"  class="infor-right-01 infor-storeUp"/>
+    <text class="infor-right-01 infor-storeUpText">收藏我</text>
+    <view class="infor-showQCode">出示优惠码</view>
 </view>
+
+
