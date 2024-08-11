@@ -6,6 +6,12 @@ page {
   background-color: #f7f7f7;  /* 背景默认灰色 */
 }
 
+.whitebox {  /* 所有 白显示块（white box），都是一样的 margin padding bgcolor(白背景) */
+  padding: 1em;
+  margin: 0.55em;
+  background-color: #fff;
+}
+
 .hr {  /* 测试使用的 hr */
   height: 2px;
   background-color: #4c4e52;

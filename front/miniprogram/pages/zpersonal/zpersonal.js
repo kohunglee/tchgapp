@@ -1,9 +1,9 @@
 Page({
   data: {
     isLogin : false,  // 是否登录
-    loginBtnText : '点击登录/注册',
-    appUserName : '',
-    consolelog : '123',
+    loginBtnText : '点击登录/注册',  // 登录按钮的文字
+    appUserName : '',  // 用户的昵称
+    appUserAvatarUrl : 'cloud://prod-2g3ftnp7705efda4.7072-prod-2g3ftnp7705efda4-1327833301/4d711717560500.jpg',  // 用户头像地址
     buttons: [{text: '取消'}, {text: '确认'}],
   },
 

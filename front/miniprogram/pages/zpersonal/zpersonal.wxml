@@ -1,37 +1,33 @@
 <!--pages/zpersonal/zpersonal.wxml-->
-
-<view class="hr"></view>
-
+<!--
 <view wx:if="{{!isLogin}}">  
   <text  class="testbtn" bindtap="loginByWx">{{loginBtnText}}</text>  
 </view>
 
-<view wx:if="{{isLogin}}">  
+<view class="bg-white" wx:if="{{isLogin}}">  
   <text >已经登录</text>
   <text  class="testbtn" bindtap="quitLogin">退出登录</text>  
-</view>
-
-<view class="hr"></view>
-
-<view>
-  <text>登录情况：{{isLogin}}</text>
 </view>
 
 <view style="margin-block: 32px;">
   <text >昵称：{{appUserName}}</text>
   <button style="display: inline;width: min-content;margin: 14px;" wx:if="{{appUserName}}" bindtap="modUserName">修改</button>
 </view>
+-->
+<!-- 未登录显示 -->
+<view class="whitebox" wx:if="{{!isLogin}}"> 
+  <text  class="testbtn" bindtap="loginByWx">{{loginBtnText}}</text>  
+</view>
 
-<view class="hr"></view>
 
-<input class="weui-input"  value="{{consolelog}}" />
 
-<view class="hr"></view>
 
-<button  style="display: inline;width: min-content;margin: 14px;"  bindtap="openNewWin">打开新页面 <mp-badge content="20"> </mp-badge></button>
+<!-- 以下内容，全是登录后显示 -->
+<view class="whitebox top-hello" wx:if="{{isLogin}}">
+  <image class="zp-avatar" src="{{appUserAvatarUrl}}"/>
+  <text class="zp-username">{{appUserName}}</text>
+</view>
 
-<mp-badge content="10"> </mp-badge>
-
-<mp-dialog title="test" show="{{false}}" bindbuttontap="tapDialogButton" buttons="{{buttons}}">
-    <view>test content</view>
-</mp-dialog>
+<view class="whitebox top-hello" wx:if="{{isLogin}}"> 
+  <text  class="testbtn" bindtap="quitLogin">退出登录</text>  
+</view>

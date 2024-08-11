@@ -12,4 +12,19 @@
   padding: 6px;
 }
 
-/* 临时------------------------ */
+/* 上面是临时代码 ------------------------ */
+
+.zp-avatar {  /* 用户头像样式 */
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  border-radius: 1em;
+}
+
+.zp-username {  /* 用户昵称样式 */
+  display: inline;
+  position: absolute;
+  margin-top: 14px;
+  margin-left: 16px;
+  font-size: 20px;
+}
