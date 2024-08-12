@@ -5,6 +5,9 @@ Page({
     appUserName : '',  // 用户的昵称
     appUserAvatarUrl : 'cloud://prod-2g3ftnp7705efda4.7072-prod-2g3ftnp7705efda4-1327833301/4d711717560500.jpg',  // 用户头像地址
     buttons: [{text: '取消'}, {text: '确认'}],
+    menuSvg: {
+
+    }
   },
 
   /* 入口 */
@@ -144,10 +147,10 @@ Page({
     }
   },
 
-  /* 测试打开新页面 */
-  openNewWin() {
+  /* 打开设置页面 */
+  openSettingPage() {
     wx.navigateTo({  
-      url: '/pages/test/test'
+      url: '/pages/zz-inpage/setting/setting'
     })
   }
 

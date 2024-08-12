@@ -33,6 +33,7 @@ Page({
     })
   },
 
+  /* 打开商家详情页 */
   openBnsPage : function(e) {
     const thisView = this;
     var e_bnsuid = e.currentTarget.dataset.uid;  // 商家唯一识别ID
@@ -46,8 +47,6 @@ Page({
       }
     })
   }
-
-  
 })
 
 /*  // 底部导航栏使用，未来可以尝试改一下

@@ -5,7 +5,8 @@
     "pages/order/order",
     "pages/zpersonal/zpersonal",
     "pages/test/test",
-    "pages/zz-inpage/bnsinfor/bnsinfor"
+    "pages/zz-inpage/bnsinfor/bnsinfor",
+    "pages/zz-inpage/setting/setting"
   ],
   "window": {
     "backgroundColor": "#f7f7f7",

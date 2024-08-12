@@ -1,0 +1,5 @@
+/* pages/zz-inpage/setting/setting.wxss */
+
+.setting-menu-text {
+  font-size: 1.1em;
+}

@@ -28,6 +28,11 @@
   <text class="zp-username">{{appUserName}}</text>
 </view>
 
-<view class="whitebox top-hello" wx:if="{{isLogin}}"> 
+<!-- <view class="whitebox top-hello" wx:if="{{isLogin}}"> 
   <text  class="testbtn" bindtap="quitLogin">退出登录</text>  
+</view> -->
+
+<view class="whitebox" wx:if="{{isLogin}}" bind:tap="openSettingPage">
+  <image class="zp-icon" src="../../image/settings-5-line.svg"/>
+  <text  class="zp-menu-text">设置</text>  
 </view>
