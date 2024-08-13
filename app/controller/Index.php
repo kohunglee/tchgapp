@@ -53,8 +53,8 @@ class Index
         $jscode = input('jscode');
         if($jscode === null) { return json(['msg' => '没有传 jscode 参数']); }
         $url = 'https://api.weixin.qq.com/sns/jscode2session';
-        $url = $url . '?appid='.env('WX_APPID');  // 敏感数据
-        $url = $url . '&secret='.env('WX_SECRET');  // 敏感数据
+        $url = $url . '?appid='.env('WX_APPID');
+        $url = $url . '&secret='.env('WX_SECRET');
         $url = $url . '&grant_type=authorization_code';
         $url = $url . '&js_code=' . $jscode;
         $ch = curl_init();

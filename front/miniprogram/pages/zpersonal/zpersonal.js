@@ -74,27 +74,6 @@ Page({
     });  
   },
 
-  /* 单击退出登录后 */
-  quitLogin : function(){
-    const thisView = this;
-    wx.showModal({
-      title: '提示', content: '确认退出当前账户？',
-      confirmText:'是', cancelText:'否',
-      success (res) {
-        if (res.confirm) {
-          getApp().saveIdTkone2Sto('', '', (err, message) => {  // 缓存到本地
-            if (err) { console.error('storage 空值化 失败', err); } else {
-              console.log('storage 信息空值化成功！' + message);
-              getApp().getUserLoginInfo();
-              getApp().globalData.isLogin = -1;
-              getApp().syncEventBus4('updataIslogin', false);
-            }
-          })
-        } else if (res.cancel) {}
-      }
-    })
-  },
-
   /* 登录后，联网获取一些信息，以及其他操作 */
   loginViewDataUpdata : function() {
     const thisView = this;

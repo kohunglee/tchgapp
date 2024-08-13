@@ -1,5 +1,23 @@
 <!--pages/zz-inpage/setting/setting.wxml-->
 
-<view class="whitebox">
+<view class="whitebox-hr" bindtap="quitLogin"><!-- 注释 -->
+  <text class="setting-menu-hrtext">用户信息</text>  
+</view>
+
+<view class="whitebox" bindtap="">
+  <text class="setting-menu-text">昵称</text>
+  <!-- <text class="setting-menu-right">狗肉</text> -->
+  <input type="nickname" class="setting-menu-name" placeholder="请输入昵称"/>
+</view>
+
+<view class="whitebox-hr" bindtap="quitLogin"><!-- 注释 -->
+  <text class="setting-menu-hrtext">账户操作</text>  
+</view>
+
+<view class="whitebox text-center" bindtap="quitLogin">
   <text class="setting-menu-text">退出登录</text>  
 </view>
+
+<!-- <view class="setting-toolbar">
+    <view class="setting-save">保存设置</view>
+</view> -->

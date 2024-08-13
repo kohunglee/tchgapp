@@ -30,8 +30,7 @@ page {
   text-align: justify;
 }
 
-/* 操作栏 */
-.infor-toolbar {
+.infor-toolbar {  /* 操作栏 */
   position: fixed;
   background-color: #f7f7f7;
   width: 100%;

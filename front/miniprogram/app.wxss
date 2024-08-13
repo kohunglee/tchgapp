@@ -7,7 +7,7 @@ page {
 }
 
 .whitebox {  /* 所有 白显示块（white box），都是一样的 margin padding bgcolor(白背景) */
-  padding: 1em;
+  padding: 1.1em 1em 1em 1em;
   margin: 0.55em;
   background-color: #fff;
 }
