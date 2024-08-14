@@ -9,6 +9,10 @@
   margin-inline: 0.55em;
 }
 
+.whitebox-hr:not(:first-child) {  /* 白块 中间的注释块，除了第一行，其余都要设置顶上的距离 */
+  margin-top: 16px;
+}
+
 .setting-menu-hrtext {  /* 「设置」页面的注释文字 */
   font-size: 0.9em;
 }
@@ -21,21 +25,18 @@
 }
 
 .setting-toolbar {  /* 操作栏 */
-  position: fixed;
   background-color: #fff;
   width: 100%;
   height: 50px;
-  bottom: 0px;
-  padding-bottom: constant(safe-area-inset-bottom);  /* 很重要 */
-  padding-bottom: env(safe-area-inset-bottom);
 }
 
-.setting-save {
+.setting-save {  /* 操作栏中的 保存 按钮 */
   float: right;
-  padding: 0.17em 1.5em;
-  background-color: #3939ff;
+  padding: 0.17em 1em;
+  background-color: #6e6eff;
   margin: 1em 0.6em;
-  border-radius: 1em;
+  margin-right: 18px;
+  border-radius: 8px;
   margin-block: 0.5em;
   color: #ffeaea;
 }

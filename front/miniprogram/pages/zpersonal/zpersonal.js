@@ -128,8 +128,14 @@ Page({
 
   /* 打开设置页面 */
   openSettingPage() {
+    const thisView = this;
     wx.navigateTo({  
-      url: '/pages/zz-inpage/setting/setting'
+      url: '/pages/zz-inpage/setting/setting',
+      success: function(res) {  // 将必要的数据传输给「设置」内页
+        res.eventChannel.emit('dataTransform', {
+          appUserName : thisView.data.appUserName,
+        })
+      }
     })
   }
 

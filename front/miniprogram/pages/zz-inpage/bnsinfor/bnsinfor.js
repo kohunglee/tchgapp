@@ -20,7 +20,7 @@ Page({
   /* 入口 */
   onLoad(option) {
     const thisView = this;
-    const eventChannel = this.getOpenerEventChannel();  // 通信通道
+    const eventChannel = thisView.getOpenerEventChannel();  // 通信通道
     eventChannel.on('dataTransform', function(data) {  // 获取到信息后，构建 商家详情页
       thisView.initBnsInfor(data);
     })
