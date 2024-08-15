@@ -4,9 +4,9 @@
     "pages/store/store",
     "pages/order/order",
     "pages/zpersonal/zpersonal",
-    "pages/test/test",
     "pages/zz-inpage/bnsinfor/bnsinfor",
-    "pages/zz-inpage/setting/setting"
+    "pages/zz-inpage/setting/setting",
+    "pages/zz-inpage/devinfo/devinfo"
   ],
   "window": {
     "backgroundColor": "#f7f7f7",

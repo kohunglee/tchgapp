@@ -23,6 +23,9 @@ Page({
       if(isLogin) { thisView.loginViewDataUpdata(); }
       if(!isLogin) { thisView.quitLoginViewDataUpdata(); }
     })
+    wx.$event.on("updataData", this, (dataObj) => {  // 自定义监听：自定义更新各页面的 data 数据
+      thisView.setData(dataObj);
+    })
   },
 
   /* 用于储存最初的 data，用于退出登录后的数据还原 */
@@ -136,6 +139,14 @@ Page({
           appUserName : thisView.data.appUserName,
         })
       }
+    })
+  },
+
+  openDevInfoPage : function(){
+    const thisView = this;
+    wx.navigateTo({  
+      url: '/pages/zz-inpage/devinfo/devinfo',
+      success: function(res) { }
     })
   }
 

@@ -1,0 +1,6 @@
+<!--pages/zz-inpage/devinfo/devinfo.wxml-->
+
+<view class="whitebox">
+  <view>（周四）2024年08月15日</view>
+  <view>1. 新添加了「开发日志（临时）的页面」，以公示进度。</view>
+</view>

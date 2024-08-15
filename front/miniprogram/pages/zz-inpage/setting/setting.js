@@ -50,44 +50,22 @@ Page({
   modUserNameInZPage : function(e) {
     const thisView = this;
     const inputName = e.detail.value;
+    if(inputName == ''){console.log('输入为空，离开'); return 0;}
     if(inputName === thisView.data.appUserName) { console.log('名字一样，离开'); return 0;}
     if(thisView.data.appUserName){
       console.log('开始修改');
-      wx.showModal({
-        title: '请输入您的新昵称',
-        editable: true,
-        placeholderText: thisView.data.appUserName,
-        success (res) {
-
-
-          if (res.confirm) { // 用户点确定
-            console.log(res.content);
-            if(res.content === '') {  // 如果用户没有输入内容，则只获取昵称
-              getApp().getUserName((err, data) => {
-                if(err || data.msg !== 'ok'){getApp().tip('获取用户呢称失败，可能是登录信息失效');} else {
-                  thisView.setData({ appUserName : data.data.username });
-                  getApp().tip('貌似成功了');
-                }
-              });
-            } else {  // 用户输入了内容，则上传昵称，并重新获取昵称
-              getApp().modUserName(res.content, (err, data) => {
-                if(err || data.msg !== 'ok'){getApp().tip('修改用户呢称失败，可能是登录信息失效');} else {
-                  getApp().getUserName((err, data) => {
-                    if(err || data.msg !== 'ok'){getApp().tip('获取用户呢称失败，可能是登录信息失效');} else {
-                      thisView.setData({ appUserName : data.data.username });
-                    }
-                  });
-                }
-              });
+      getApp().modUserName(inputName, (err, data) => {  // 向服务器发送修改请求
+        if(err || data.msg !== 'ok'){getApp().tip('修改用户呢称失败，可能是登录信息失效');} else {
+          getApp().getUserName((err, data) => {  // 向服务器请求获取最新的昵称
+            if(err || data.msg !== 'ok'){getApp().tip('获取用户呢称失败，可能是登录信息失效');} else {
+              const onLineUserName = data.data.username;
+              thisView.setData({ appUserName : onLineUserName });
+              wx.$event.emit('updataData', { appUserName : onLineUserName });  // 向「个人中心」页面，发送新修改的昵称
+              wx.showToast({ title: '修改昵称成功', icon: 'success', duration: 1000 });
             }
-
-
-
-            
-          } else if (res.cancel) { }
+          });
         }
-      })
+      });
     }
   }
-  
 })

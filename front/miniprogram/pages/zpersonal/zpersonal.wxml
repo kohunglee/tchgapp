@@ -32,7 +32,13 @@
   <text  class="testbtn" bindtap="quitLogin">退出登录</text>  
 </view> -->
 
+<view class="whitebox" wx:if="{{isLogin}}" bind:tap="openDevInfoPage">
+  <image class="zp-icon" src="../../image/megaphone-line.svg"/>
+  <text  class="zp-menu-text">开发日志（8.15更新）</text>  
+</view>
+
 <view class="whitebox" wx:if="{{isLogin}}" bind:tap="openSettingPage">
   <image class="zp-icon" src="../../image/settings-5-line.svg"/>
   <text  class="zp-menu-text">设置</text>  
 </view>
+
