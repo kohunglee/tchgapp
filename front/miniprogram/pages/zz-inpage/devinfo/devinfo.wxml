@@ -1,6 +1,16 @@
 <!--pages/zz-inpage/devinfo/devinfo.wxml-->
 
 <view class="whitebox">
-  <view>（周四）2024年08月15日</view>
-  <view>1. 新添加了「开发日志（临时）的页面」，以公示进度。</view>
+  <view>本页面只是开发时，临时展示进度使用。正式版肯定不会包含。</view>
 </view>
+
+<view class="whitebox">
+  <view>（周五）2024年08月16日</view>
+  <view>阅读和研究了微信云托管的图片上传机制，然后简单搞了一版测试... 之后用于头像、订单照片等... 目前设立在「酒水」页面中，可以把图片上传到小程序的服务器</view>
+</view>
+
+<view class="whitebox">
+  <view>（周四）2024年08月15日</view>
+  <view>新添加了「开发日志（临时）的页面」，以公示进度。</view>
+</view>
+

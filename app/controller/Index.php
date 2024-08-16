@@ -132,4 +132,24 @@ class Index
             return json(['msg' => 'err', 'details' => '出错了，原因未知，昵称为' . $newName]);
         }
     }
+
+    /* API：修改头像（这里只接收头像的 url，不接收头像的文件） */
+    public function modUserImageUrl() {
+        $openid = input('openid');
+        $token = input('token');
+        $postType = input('postType');
+        $newImageUrl = input('newImageUrl');  // 头像的 url 字符串
+        $defaultImageUrl = 'cloud://prod-2g3ftnp7705efda4.7072-prod-2g3ftnp7705efda4-1327833301/4d711717560500.jpg';  // 默认的头像 Url
+        if($newName === '') { $newName = $defaultImageUrl; }  // 如果头像地址为空，则使用默认头像地址
+        $nameCount = User::where(['user_name' => $newName])->count();
+        if($postType === 'storage' && Lib::checkSQLSession($openid, $token)) {  // 鉴权以修改头像 Url
+            $data = [ 'user_name' => $newName ];
+            User::where('user_wxopenid', $openid)->update($data);
+            return json(['msg' => 'ok', 'details' => '修改用户呢称成功！'. $newName]);
+        } else {
+            return json(['msg' => 'err', 'details' => '出错了，原因未知，昵称为' . $newName]);
+        }
+    }
+
+
 }

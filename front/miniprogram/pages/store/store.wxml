@@ -4,3 +4,7 @@
 <view>
   <text>登录状态：{{isLogin}}</text>
 </view>
+
+<view class="whitebox">
+  <button bind:tap="testOpenImage">单击上传图片</button>
+</view>

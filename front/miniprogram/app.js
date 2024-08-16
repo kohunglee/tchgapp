@@ -106,7 +106,7 @@ App({
     })
   },
 
-  /* 获取储存到本地的 id 和 token。（异步）  */
+  /* 获取储存到本地的 id 和 token （异步）  */
   getInStoIdToken : function(callback){
     var openid, token;
     return wx.getStorage({
@@ -185,7 +185,7 @@ App({
 
   /* 登录后，获取用户名 */
   getUserName : function(callback) {
-    var appfunc = this;
+    const appfunc = this;
     appfunc.userSendPostToCloud('storage', '/index/getUserName', {}, (err, data) => {
       callback(err, data);
     });
@@ -193,15 +193,34 @@ App({
 
   /* 登录后，修改用户名 */
   modUserName : function( newName, callback) {
-    var appfunc = this;
+    const appfunc = this;
     if(newName === '') {newName = 'empty'}
     appfunc.userSendPostToCloud('storage', '/index/modUserName', {'newName' : newName}, (err, data) => {
       callback(err, data);
     });
   },
 
-
-
-
+  /* 测试上传图片 */
+  testUpLoadFile : function() {
+    const appfunc = this;
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['album'],
+      sizeType: ['compressed'],
+      success(res) {  
+        const imageUrl = res.tempFiles[0].tempFilePath;  // 从此处获取了本地的图片路径
+        const imageSize = res.tempFiles[0].size;  // 图片的字节数
+        wx.cloud.init();
+        wx.cloud.uploadFile({
+          cloudPath: 'example'+ imageSize +'.jpg',
+          filePath: imageUrl,
+          config: {env: 'prod-2g3ftnp7705efda4'},
+          success: function(res) { appfunc.tip('成功！' + res.fileID, 4000) },
+          fail: function(err) { appfunc.tip(err) }
+        })
+      }
+    })
+  }
 
 })
