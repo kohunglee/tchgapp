@@ -183,10 +183,18 @@ App({
     } else if(type === 'global') { /* 非正常登录，也叫 伪登录游客，先空着 */  }
   },
 
-  /* 登录后，获取用户名 */
+  /* （临近作废）登录后，获取用户名 */
   getUserName : function(callback) {
     const appfunc = this;
     appfunc.userSendPostToCloud('storage', '/index/getUserName', {}, (err, data) => {
+      callback(err, data);
+    });
+  },
+
+  /* 登录后，获取用户的信息 */
+  getUserInfo : function(callback) {
+    const appfunc = this;
+    appfunc.userSendPostToCloud('storage', '/index/getUserMoreInfo', {}, (err, data) => {
       callback(err, data);
     });
   },
@@ -196,6 +204,15 @@ App({
     const appfunc = this;
     if(newName === '') {newName = 'empty'}
     appfunc.userSendPostToCloud('storage', '/index/modUserName', {'newName' : newName}, (err, data) => {
+      callback(err, data);
+    });
+  },
+
+  /* 登录后，修改用户的头像（url） */
+  modUserAvatarUrl : function( newAvatarUrl, callback) {
+    const appfunc = this;
+    if(newAvatarUrl === '') {newAvatarUrl = 'empty'}
+    appfunc.userSendPostToCloud('storage', '/index/modUserAvatarUrl', {'newAvatarUrl' : newAvatarUrl}, (err, data) => {
       callback(err, data);
     });
   },
@@ -211,13 +228,8 @@ App({
       success(res) {  
         const imageUrl = res.tempFiles[0].tempFilePath;  // 从此处获取了本地的图片路径
         const imageSize = res.tempFiles[0].size;  // 图片的字节数
-        wx.cloud.init();
-        wx.cloud.uploadFile({
-          cloudPath: 'example'+ imageSize +'.jpg',
-          filePath: imageUrl,
-          config: {env: 'prod-2g3ftnp7705efda4'},
-          success: function(res) { appfunc.tip('成功！' + res.fileID, 4000) },
-          fail: function(err) { appfunc.tip(err) }
+        wx.navigateTo({  
+          url: '/pages/zz-inpage/imgcropper/imgcropper?imgsrc=' + imageUrl
         })
       }
     })

@@ -1,0 +1,17 @@
+<!--pages/zz-inpage/imgcropper/imgcropper.wxml-->
+<view class="cropper-view">
+  <image-cropper
+        width="{{250}}"
+        height="{{250}}"
+        imgSrc="{{cropper_src}}"
+        bindtapcut="clickcut"
+        disable_width="{{true}}"
+        disable_height="{{true}}"
+        limit_move="{{true}}"
+        disable_rotate="{{true}}"
+        disable_ratio="{{true}}"
+  >
+  </image-cropper>
+</view>
+
+<button class='btn-submit' bind:tap="submitMyImage">确定</button>

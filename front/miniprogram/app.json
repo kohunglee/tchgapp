@@ -6,7 +6,8 @@
     "pages/zpersonal/zpersonal",
     "pages/zz-inpage/bnsinfor/bnsinfor",
     "pages/zz-inpage/setting/setting",
-    "pages/zz-inpage/devinfo/devinfo"
+    "pages/zz-inpage/devinfo/devinfo",
+    "pages/zz-inpage/imgcropper/imgcropper"
   ],
   "window": {
     "backgroundColor": "#f7f7f7",

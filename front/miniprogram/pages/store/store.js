@@ -19,6 +19,18 @@ Page({
 
   testOpenImage : function(){
     getApp().testUpLoadFile();
+  },
+
+  openImgCropper : function(){
+    const thisView = this;
+    wx.navigateTo({  
+      url: '/pages/zz-inpage/imgcropper/imgcropper',
+      success: function(res) {  // 将必要的数据传输给「设置」内页
+        res.eventChannel.emit('dataTransform', {
+          appUserName : thisView.data.appUserName,
+        })
+      }
+    })
   }
 })
 

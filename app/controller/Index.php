@@ -40,7 +40,7 @@ class Index
             if ($version) {  $msg = $msg . "数据库连接成功，数据库版本为：" . $version[0]['VERSION()']; } 
             else { $msg = $msg . "查询数据库版本失败，但可能连接仍成功（取决于具体错误）。"; }  
         } catch (\PDOException $e) { $msg = $msg."数据库连接或查询失败：" . $e->getMessage(); }
-        return json(['msg' => $msg , 'status' => '1', 'ps' => '修复低级代码错误，昵称乱套', 'rootpath' => dirname(__DIR__)]) ;
+        return json(['msg' => $msg , 'status' => '1', 'ps' => '添加API：获取用户更多信息', 'rootpath' => dirname(__DIR__)]) ;
     }
 
     /* 路由测试 hello world */
@@ -95,14 +95,35 @@ class Index
         }
     }
 
-    /* API：获取用户名 */
+    /* （暂时作废）API：获取用户名 */
     public function getUserName() {
         $openid = input('openid');
         $token = input('token');
         $postType = input('postType');
         if($postType === 'storage' && Lib::checkSQLSession($openid, $token)) {
             $username = User::where('user_wxopenid', $openid)->value('user_name');
-            return json(['msg' => 'ok', 'details' => '获取用户呢称成功！', 'data' => ['username' => $username]]);
+            return json(['msg' => 'ok', 'details' => '获取用户呢称成功！',
+                        'data' => [
+                            'username' => $username
+                        ]]);
+        } else {
+            return json(['msg' => 'err', 'details' => '出错了，原因未知']);
+        }
+    }
+
+    /* API：获取用户更多信息 */
+    public function getUserMoreInfo() {
+        $openid = input('openid');
+        $token = input('token');
+        $postType = input('postType');
+        if($postType === 'storage' && Lib::checkSQLSession($openid, $token)) {
+            $userInfo = User::where('user_wxopenid', $openid)->field('user_name, user_phone, user_avatar')->find();
+            return json(['msg' => 'ok', 'details' => '获取用户信息成功！',
+                        'data' => [
+                            'username' => $userInfo['user_name'],
+                            'useravatar' => $userInfo['user_avatar'],
+                            'userphone' => $userInfo['user_phone'],
+                        ]]);
         } else {
             return json(['msg' => 'err', 'details' => '出错了，原因未知']);
         }
@@ -134,20 +155,19 @@ class Index
     }
 
     /* API：修改头像（这里只接收头像的 url，不接收头像的文件） */
-    public function modUserImageUrl() {
+    public function modUserAvatarUrl() {
         $openid = input('openid');
         $token = input('token');
         $postType = input('postType');
-        $newImageUrl = input('newImageUrl');  // 头像的 url 字符串
-        $defaultImageUrl = 'cloud://prod-2g3ftnp7705efda4.7072-prod-2g3ftnp7705efda4-1327833301/4d711717560500.jpg';  // 默认的头像 Url
-        if($newName === '') { $newName = $defaultImageUrl; }  // 如果头像地址为空，则使用默认头像地址
-        $nameCount = User::where(['user_name' => $newName])->count();
+        $newAvatarUrl = input('newAvatarUrl');  // 头像的 url 字符串
+        $defaultImageUrl = 'cloud://prod-2g3ftnp7705efda4.7072-prod-2g3ftnp7705efda4-1327833301/4d711717560500.jpg';  // 默认头像地址
+        if($newAvatarUrl === '') { $newAvatarUrl = $defaultImageUrl; }  // 如果头像地址为空，则使用 默认头像地址
         if($postType === 'storage' && Lib::checkSQLSession($openid, $token)) {  // 鉴权以修改头像 Url
-            $data = [ 'user_name' => $newName ];
+            $data = [ 'user_avatar' => $newAvatarUrl ];
             User::where('user_wxopenid', $openid)->update($data);
-            return json(['msg' => 'ok', 'details' => '修改用户呢称成功！'. $newName]);
+            return json(['msg' => 'ok', 'details' => '修改用户头像成功！'. $newAvatarUrl]);
         } else {
-            return json(['msg' => 'err', 'details' => '出错了，原因未知，昵称为' . $newName]);
+            return json(['msg' => 'err', 'details' => '出错了，原因未知，头像 URL 为' . $newAvatarUrl]);
         }
     }
 

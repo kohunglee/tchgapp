@@ -3,7 +3,7 @@ Page({
     isLogin : false,  // 是否登录
     loginBtnText : '点击登录/注册',  // 登录按钮的文字
     appUserName : '',  // 用户的昵称
-    appUserAvatarUrl : 'cloud://prod-2g3ftnp7705efda4.7072-prod-2g3ftnp7705efda4-1327833301/4d711717560500.jpg',  // 用户头像地址
+    appUserAvatarUrl : '',  // 用户头像地址
     buttons: [{text: '取消'}, {text: '确认'}],
     menuSvg: {
 
@@ -80,9 +80,17 @@ Page({
   /* 登录后，联网获取一些信息，以及其他操作 */
   loginViewDataUpdata : function() {
     const thisView = this;
-    getApp().getUserName((err, data) => {  // 获取用户的姓名
-      if(err || data.msg !== 'ok'){console.log(data.msg);getApp().tip(data.msg + '获取用户呢称失败');} else {
-        thisView.setData({ appUserName : data.data.username });
+    getApp().getUserInfo((err, data) => {  // 获取用户的信息
+      if(err || data.msg !== 'ok'){console.log(data.msg);getApp().tip(data.msg + '获取用户信息失败');} else {
+        var username = data.data.username;
+        var useravatar = data.data.useravatar;
+        if(useravatar == ''){
+          useravatar = 'cloud://prod-2g3ftnp7705efda4.7072-prod-2g3ftnp7705efda4-1327833301/4d711717560500.jpg';
+        }
+        thisView.setData({ 
+          appUserName : username,
+          appUserAvatarUrl : useravatar,
+        });
       }
     });
   },
@@ -93,7 +101,7 @@ Page({
     thisView.setData( thisView.initData );  // 清空（还原）data
   },
 
-  /* 修改用户昵称 */
+  /* (临近作废) 修改用户昵称 */
   modUserName : function() {
     const thisView = this;
     if(thisView.data.appUserName){
@@ -142,6 +150,7 @@ Page({
     })
   },
 
+  /* 打开 开发日志 内页 */
   openDevInfoPage : function(){
     const thisView = this;
     wx.navigateTo({  

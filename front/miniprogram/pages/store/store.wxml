@@ -3,8 +3,13 @@
 
 <view>
   <text>登录状态：{{isLogin}}</text>
+  <view>当前这个页面，被用作临时的测试页面</view>
 </view>
 
 <view class="whitebox">
   <button bind:tap="testOpenImage">单击上传图片</button>
+</view>
+
+<view class="whitebox">
+  <button bind:tap="openImgCropper">进入图片裁剪页面</button>
 </view>

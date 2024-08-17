@@ -7,3 +7,4 @@
 `/zz-inpage/bnsinfor/`          商家详情页
 `/zz-inpage/setting/`           我的 APP 的设置界面
 `/zz-inpage/devinfo/`           临时开辟的开发进度公示页面
+`/zz-inpage/imgcropper/`        图片的裁剪页面
