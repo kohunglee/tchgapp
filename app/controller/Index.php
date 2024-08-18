@@ -23,8 +23,7 @@ use app\common\Lib;
 
 class Index
 {
-    public function __construct() {
-    }
+    public function __construct() {}
 
 // +---------------------------------------------------------------------
 // | 对外的 API 开放区（而具函数放在 app/common/Lib.php）
@@ -165,7 +164,7 @@ class Index
         if($postType === 'storage' && Lib::checkSQLSession($openid, $token)) {  // 鉴权以修改头像 Url
             $data = [ 'user_avatar' => $newAvatarUrl ];
             User::where('user_wxopenid', $openid)->update($data);
-            return json(['msg' => 'ok', 'details' => '修改用户头像成功！'. $newAvatarUrl]);
+            return json(['msg' => 'ok', 'details' => '修改用户头像 url 成功！'. $newAvatarUrl]);
         } else {
             return json(['msg' => 'err', 'details' => '出错了，原因未知，头像 URL 为' . $newAvatarUrl]);
         }
