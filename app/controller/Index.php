@@ -29,7 +29,7 @@ class Index
 // | 对外的 API 接口区（而具函数放在 app/common/Lib.php）
 // +--------------------------------------------------------------------
 
-    /* 首页，显示数据库地址以及能否连接到它 */ 
+    /* 首页，显示数据库地址，以及能否连接到它 */ 
     public function index() {
         $msg = '';
         $config = Config::get('database.connections.mysql');
